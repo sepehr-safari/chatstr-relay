@@ -5,6 +5,7 @@ go 1.22.2
 require (
 	github.com/fiatjaf/eventstore v0.4.2
 	github.com/fiatjaf/khatru v0.4.3
+	github.com/joho/godotenv v1.5.1
 	github.com/nbd-wtf/go-nostr v0.31.2
 )
 
@@ -28,7 +29,6 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/flatbuffers v23.5.26+incompatible // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.3 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
