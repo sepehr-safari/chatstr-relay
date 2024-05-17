@@ -16,6 +16,8 @@ import (
 )
 
 func main() {
+	loadEnv()
+
 	relayPrivateKey, relayPublicKey := getRelayKeyPair()
 
 	relay := initRelay()
@@ -25,16 +27,17 @@ func main() {
 	applyRelayPolicies(relay)
 	applyRelayRouters(relay, relayPublicKey, relayPrivateKey)
 
-	fmt.Println("running on :3334")
-	http.ListenAndServe(":3334", relay)
+	listenAndServeTLS(relay)
 }
 
-func getRelayKeyPair() (string, string) {
+func loadEnv() {
 	err := godotenv.Load()
 	if err != nil {
     log.Fatal("Error loading .env file")
 	}
+}
 
+func getRelayKeyPair() (string, string) {
 	relayPrivateKey := os.Getenv("RELAY_PRIVATE_KEY")
 	relayPublicKey := os.Getenv("RELAY_PUBLIC_KEY")
 	if relayPrivateKey == "" || relayPublicKey == "" {
@@ -108,4 +111,15 @@ func applyRelayRouters(relay *khatru.Relay, relayPublicKey string, relayPrivateK
 		w.Header().Set("content-type", "text/html")
 		fmt.Fprint(w, `ok!`)
 	})
+}
+
+func listenAndServeTLS(relay *khatru.Relay) {
+	tlsCertPath := os.Getenv("TLS_CERT_PATH")
+	tlsKeyPath := os.Getenv("TLS_KEY_PATH")
+	if tlsCertPath == "" || tlsKeyPath == "" {
+		log.Fatal("TLS_CERT_PATH and TLS_KEY_PATH must be set in .env")
+	}
+
+	fmt.Println("running on :443")
+	http.ListenAndServeTLS(":443", tlsCertPath, tlsKeyPath, relay)
 }
